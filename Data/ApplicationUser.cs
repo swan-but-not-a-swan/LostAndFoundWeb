@@ -8,5 +8,7 @@ public class ApplicationUser : IdentityUser
     [Required]
     [MaxLength(10)]
     public string YearGroup { get; set; }
+    public List<LostItem> LostItems { get; set; }
+    public List<FoundItem> FoundItems { get; set; }
 }
 
