@@ -1,0 +1,46 @@
+﻿@page "/makefounditem"
+@using Azure.Storage.Blobs
+@using LostAndFoundWeb.Data
+@using Microsoft.AspNetCore.Identity
+@inject BlobServiceClient blob
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManager<ApplicationUser> UserManager
+@inject ApplicationDbContext db
+@rendermode InteractiveServer
+
+<h3>Makefounditem</h3>
+<EditForm EditContext="_EditContext" FormName="MakeFoundItem" OnValidSubmit="Submit" method="post">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+    <div class="form-floating mb-3">
+        <InputText @bind-Value="FoundItem.Name" class="form-control" placeholder="Name"/>
+        <label for="LostItem.Name" class="form-label">Name</label>
+        <ValidationMessage For="() => FoundItem.Name" class="text-danger"/>
+    </div>
+    <div class="input-group">
+        <div class="form-floating mb-3">
+            <InputText @bind-Value="FoundItem.WordOne" class="form-control" placeholder="WordOne"/>
+            <label for="LostItem.WordOne" class="form-label">WordOne</label>
+            <ValidationMessage For="() => FoundItem.WordOne" class="text-danger"/>
+        </div>
+        <div class="form-floating mb-3">
+            <InputText @bind-Value="FoundItem.WordTwo" class="form-control" placeholder="WordTwo"/>
+            <label for="LostItem.WordTwo" class="form-label">WordTwo</label>
+            <ValidationMessage For="() => FoundItem.WordTwo" class="text-danger"/>
+        </div>
+        <div class="form-floating mb-3">
+            <InputText @bind-Value="FoundItem.WordThree" class="form-control" placeholder="WordThree"/>
+            <label for="LostItem.WordThree" class="form-label">WordThree</label>
+            <ValidationMessage For="() => FoundItem.WordThree" class="text-danger"/>
+        </div>
+    </div>
+    <div class="form-floating mb-3">
+        <InputText @bind-Value="FoundItem.Location" class="form-control" placeholder="Name"/>
+        <label for="LostItem.Location" class="form-label">Location</label>
+        <ValidationMessage For="() => FoundItem.Location" class="text-danger"/>
+    </div>
+    <InputFile OnChange="@LoadFiles" class="form-control" multiple accept=".png,.jpg,.jpeg"/>
+    <ValidationMessage For="() => FoundItem.Urls" class="text-danger"/>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+

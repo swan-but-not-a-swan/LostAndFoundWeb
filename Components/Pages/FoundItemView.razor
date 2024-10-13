@@ -1,4 +1,4 @@
-﻿@page "/LostItemView"
+﻿@page "/FoundItemView"
 @using LostAndFoundWeb.Data
 @using LostAndFoundWeb.Services
 @using Microsoft.AspNetCore.Identity
@@ -8,20 +8,20 @@
 @inject ApplicationDbContext db
 @attribute [StreamRendering]
 @rendermode InteractiveServer
-<h3>LostItemView</h3>
-@if (LostItem is not null)
+<h3>FoundItemView</h3>
+@if (FoundItem is not null)
 {
     <div class="container">
         <div class="row">
             <div id="carouselExampleFade" class="carousel slide carousel-fade">
                 <div class="carousel-inner">
                     <div class="carousel-item active" data-bs-slide="0">
-                        <img src="@LostItem.Urls[0]" class="d-block w-100" alt="..." style="height:200px;">
+                        <img src="@FoundItem.Urls[0]" class="d-block w-100" alt="..." style="height:200px;">
                     </div>
-                   @for(int i = 1; i < LostItem.Urls.Count; i++)
+                   @for(int i = 1; i < FoundItem.Urls.Count; i++)
                     {
                         <div class="carousel-item" data-bs-slide="0">
-                            <img src="@LostItem.Urls[i]" class="d-block w-100" alt="..." style="height:200px;">
+                            <img src="@FoundItem.Urls[i]" class="d-block w-100" alt="..." style="height:200px;">
                         </div>
                     }
                 </div>
@@ -37,38 +37,38 @@
         </div>
         
             <div class="col-md-6 col-centered">
-                <EditForm FormName="LostItem" Model="LostItem" OnValidSubmit="Found">
+                <EditForm FormName="LostItem" Model="FoundItem" OnValidSubmit="Found">
                     <ValidationSummary/>
                     <DataAnnotationsValidator/>
                     <div class="form-floating mb-3">
-                        <input type="text" value="@LostItem.Name" class="form-control" placeholder="Address" disabled />
+                        <input type="text" value="@FoundItem.Name" class="form-control" placeholder="Address" disabled />
                         <label for="username" class="form-label">Address</label>
                     </div>
                     <div class="form-floating mb-3">
                         <div class="input-group mb-3">
                             <div class="form-floating w-25">
-                                <input type="text" value="@LostItem.WordOne" class="form-control" placeholder="Date" disabled />
+                                <input type="text" value="@FoundItem.WordOne" class="form-control" placeholder="Date" disabled />
                                 <label for="username" class="form-label">Date</label>
                             </div>
                             <div class="form-floating w-25">
-                                <input type="text" value="@LostItem.WordTwo" class="form-control" placeholder="Start Time" disabled />
+                                <input type="text" value="@FoundItem.WordTwo" class="form-control" placeholder="Start Time" disabled />
                                 <label for="starttime" class="form-label">StartTime</label>
                             </div>
                             <div class="form-floating w-25">
-                                <input type="text" value="@LostItem.WordThree" class="form-control" placeholder="End Time" disabled/>
+                                <input type="text" value="@FoundItem.WordThree" class="form-control" placeholder="End Time" disabled/>
                                 <label for="starttime" class="form-label">EndTime</label>
                             </div>
                         </div>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" value="@LostItem.Location" class="form-control" placeholder="Description" disabled/>
+                        <input type="text" value="@FoundItem.Location" class="form-control" placeholder="Description" disabled/>
                         <label for="description" class="form-label">Description</label>
                     </div>
                 <div class="form-floating mb-3">
                     <InputText @bind-Value="@PickUpLocation" class="form-control" placeholder="Description" />
                     <label for="description" class="form-label">Pickup Location</label>
                 </div>
-                <button type="submit" class="w-100 btn btn-lg btn-primary">Found!</button>
+                <button type="submit" class="w-100 btn btn-lg btn-primary">Owner!</button>
                 </EditForm>
             </div>
         </div>
@@ -79,28 +79,29 @@
 }
 @code {
     [SupplyParameterFromForm]
-    private LostItem LostItem { get; set; } = new();
+    private FoundItem FoundItem { get; set; } = new();
     private string PickUpLocation{ get; set; }
     protected override async Task OnInitializedAsync()
     {
         StateContainer.LostEvent += StateHasChanged;
-        LostItem = StateContainer.LostItem;
+        FoundItem = StateContainer.FoundItem;
     }
     private async Task Found()
     {
         var authstate = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = await UserManager.GetUserAsync(authstate.User);
-        LostItem.HasBeenFound = true;
-        FoundItem foundItem = new FoundItem()
+        FoundItem.OwnerFound = true;
+        LostItem lostItem = new LostItem()
             {
-                Name = LostItem.Name,
-                WordOne = LostItem.WordOne,
-                WordTwo = LostItem.WordTwo,
-                WordThree = LostItem.WordThree,
-                Location = LostItem.Location
+                Name = FoundItem.Name,
+                WordOne = FoundItem.WordOne,
+                WordTwo = FoundItem.WordTwo,
+                WordThree = FoundItem.WordThree,
+                Location = FoundItem.Location,
+                HasBeenFound = true
             };
-        user.FoundItems.Add(foundItem);
-        await db.FoundItems.AddAsync(foundItem);
+        user.LostItems.Add(lostItem);
+        await db.LostItems.AddAsync(lostItem);
         //TODO: Send email
         await db.SaveChangesAsync();
     }
