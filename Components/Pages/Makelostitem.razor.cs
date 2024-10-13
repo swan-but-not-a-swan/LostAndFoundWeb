@@ -59,6 +59,7 @@ public partial class Makelostitem
         }
         lostItem.LostUser = user;
         lostItem.Urls = LostItem.Urls;
+        user.LostItems.Add(lostItem);
         await db.LostItems.AddAsync(lostItem);
         await db.SaveChangesAsync();
     }

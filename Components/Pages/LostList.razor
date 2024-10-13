@@ -71,13 +71,7 @@ else
     private List<LostItem> ShowItems{ get; set; }
     protected override async Task OnInitializedAsync()
     {
-        LostItems = db.LostItems.Where(l => l.HasBeenFound == false).Select(l => new LostItem(){ 
-            Name = l.Name, 
-            WordOne = l.WordOne, 
-            WordTwo = l.WordTwo, 
-            WordThree = l.WordThree,
-            Location = l.Location,
-            Urls = l.Urls }).ToList(); //TODO: To optmise here
+        LostItems = db.LostItems.Where(l => l.HasBeenFound == false).ToList(); //TODO: To optmise here
         ShowItems = LostItems;
     }
     private async Task Search()
