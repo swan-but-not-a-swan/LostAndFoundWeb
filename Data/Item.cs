@@ -9,11 +9,15 @@ public abstract class Item
     [MaxLength(100)]
     public string Name { get; set; }
     [Required]
-    [MaxLength(400)]
-    public string Description { get; set; }
+    [MaxLength(20)]
+    public string WordOne { get; set; }
     [Required]
     [MaxLength(20)]
-    public string Category { get; set; }
+    public string WordTwo { get; set; }
+    [Required]
+    [MaxLength(20)]
+    public string WordThree { get; set; }
+    public List<string> Urls { get; set; } = new();
     [Required]
     [MaxLength(100)]
     public string Location { get; set; }

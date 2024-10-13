@@ -1,0 +1,100 @@
+﻿@page "/lostlist"
+@using LostAndFoundWeb.Data
+@using LostAndFoundWeb.Services
+@using Microsoft.EntityFrameworkCore
+@inject ApplicationDbContext db
+@inject StateContainer StateContainer
+@attribute [StreamRendering]
+@rendermode InteractiveServer
+ <style>
+     .row{
+         height:100px;
+     }
+ </style>
+<PageTitle>Weather</PageTitle>
+@if(LostItems is null)
+{
+    <p>Loading Lost Items...</p>
+}
+else
+{
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <InputText @bind-Value="Filter.WordOne" placeholder="WordOne"/>
+        </div>
+        <div class="col">
+            <InputText @bind-Value="Filter.WordTwo" placeholder="WordTwo" />
+        </div>
+        <div class="col">
+            <InputText @bind-Value="Filter.WordThree" placeholder="WordThree" />
+        </div>
+        <div class="col">
+            <button type="button" class="btn btn-primary" @onclick="Search">Search</button>
+        </div>
+        <div class="col">
+            <NavLink href="/makelostitem">
+                <button class="btn btn-primary">Create Bounty</button>
+            </NavLink>
+        </div>
+    </div>
+    <div class="row row-cols-1 row-cols-md-4 g-1">
+        @foreach (var item in ShowItems)
+        {
+            <div class="col">
+                <div class="card" style="width: 16rem;">
+                <img src="@item.Urls[0]" style="height:14rem;"class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Name</h5>
+                    <p class="card-text">@item.Location </p>
+                </div>
+                <ul class="list-group list-group-flush text-center">
+                    <li class="list-group-item">@item.WordOne, @item.WordTwo, @item.WordThree</li>
+                    
+                    
+                </ul>
+                <div class="card-body text-center">
+                    <NavLink href="LostItemView">
+                        <button class="btn btn-primary" @onclick="() => StateContainer.LostItemFound(item)">Investigate</button>
+                    </NavLink>
+                </div>
+            </div>
+        </div>
+        }
+    </div>  
+</div>
+}
+
+@code{
+    private Input Filter { get; set; } = new();
+    private List<LostItem> LostItems { get; set; } = new();
+    private List<LostItem> ShowItems{ get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        LostItems = db.LostItems.Where(l => l.HasBeenFound == false).ToList(); //TODO: To optmise here
+        ShowItems = LostItems;
+    }
+    private async Task Search()
+    {
+        if (String.IsNullOrEmpty(Filter.WordOne) && String.IsNullOrEmpty(Filter.WordTwo) && String.IsNullOrEmpty(Filter.WordThree))
+        {
+            ShowItems = LostItems;
+        }
+        else
+        {
+            ShowItems = LostItems.Select(l => new
+            {
+                item = l,
+                MatchEvaluation = (l.WordOne == Filter.WordOne ? 1 : 0) + (l.WordTwo == Filter.WordTwo ? 1 : 0) + (l.WordThree == Filter.WordThree ? 1 : 0),
+            })
+            .OrderByDescending(x => x.MatchEvaluation)
+            .Select(l => l.item).ToList();
+        }
+    }
+    private sealed class Input
+    {
+        public string? WordOne { get; set; }
+        public string? WordTwo { get; set; }
+        public string? WordThree { get; set; }
+    }
+}

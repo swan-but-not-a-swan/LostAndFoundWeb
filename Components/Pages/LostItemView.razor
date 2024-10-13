@@ -1,0 +1,107 @@
+﻿@page "/LostItemView"
+@using LostAndFoundWeb.Data
+@using LostAndFoundWeb.Services
+@using Microsoft.AspNetCore.Identity
+@inject StateContainer StateContainer
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManager<ApplicationUser> UserManager
+@inject ApplicationDbContext db
+@attribute [StreamRendering]
+@rendermode InteractiveServer
+<h3>LostItemView</h3>
+@if (LostItem is not null)
+{
+    <div class="container">
+        <div class="row">
+            <div id="carouselExampleFade" class="carousel slide carousel-fade">
+                <div class="carousel-inner">
+                    <div class="carousel-item active" data-bs-slide="0">
+                        <img src="@LostItem.Urls[0]" class="d-block w-100" alt="..." style="height:200px;">
+                    </div>
+                   @for(int i = 1; i < LostItem.Urls.Count; i++)
+                    {
+                        <div class="carousel-item" data-bs-slide="0">
+                            <img src="@LostItem.Urls[i]" class="d-block w-100" alt="..." style="height:200px;">
+                        </div>
+                    }
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+        
+            <div class="col-md-6 col-centered">
+                <EditForm FormName="LostItem" Model="LostItem" OnValidSubmit="Found">
+                    <ValidationSummary/>
+                    <DataAnnotationsValidator/>
+                    <div class="form-floating mb-3">
+                        <input type="text" value="@LostItem.Name" class="form-control" placeholder="Address" disabled />
+                        <label for="username" class="form-label">Address</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <div class="input-group mb-3">
+                            <div class="form-floating w-25">
+                                <input type="text" value="@LostItem.WordOne" class="form-control" placeholder="Date" disabled />
+                                <label for="username" class="form-label">Date</label>
+                            </div>
+                            <div class="form-floating w-25">
+                                <input type="text" value="@LostItem.WordTwo" class="form-control" placeholder="Start Time" disabled />
+                                <label for="starttime" class="form-label">StartTime</label>
+                            </div>
+                            <div class="form-floating w-25">
+                                <input type="text" value="@LostItem.WordThree" class="form-control" placeholder="End Time" disabled/>
+                                <label for="starttime" class="form-label">EndTime</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" value="@LostItem.Location" class="form-control" placeholder="Description" disabled/>
+                        <label for="description" class="form-label">Description</label>
+                    </div>
+                <div class="form-floating mb-3">
+                    <InputText @bind-Value="@PickUpLocation" class="form-control" placeholder="Description" />
+                    <label for="description" class="form-label">Pickup Location</label>
+                </div>
+                <button type="submit" class="w-100 btn btn-lg btn-primary">Found!</button>
+                </EditForm>
+            </div>
+        </div>
+    
+    <script>
+        const carousel = new bootstrap.Carousel('#myCarousel')
+    </script>
+}
+@code {
+    [SupplyParameterFromForm]
+    private LostItem LostItem { get; set; } = new();
+    private string PickUpLocation{ get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        StateContainer.MadeEvent += StateHasChanged;
+        LostItem = StateContainer.LostItem;
+    }
+    private async Task Found()
+    {
+        var authstate = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = await UserManager.GetUserAsync(authstate.User);
+        LostItem.HasBeenFound = true;
+        FoundItem foundItem = new FoundItem()
+            {
+                Name = LostItem.Name,
+                WordOne = LostItem.WordOne,
+                WordTwo = LostItem.WordTwo,
+                WordThree = LostItem.WordThree,
+                Location = LostItem.Location
+            };
+        user.FoundItems.Add(foundItem);
+        await db.FoundItems.AddAsync(foundItem);
+        //TODO: Send email
+        await db.SaveChangesAsync();
+    }
+}
