@@ -1,4 +1,4 @@
-﻿@page "/lostlist"
+﻿@page "/foundlist"
 @using LostAndFoundWeb.Data
 @using LostAndFoundWeb.Services
 @using Microsoft.EntityFrameworkCore
@@ -12,7 +12,7 @@
      }
  </style>
 <PageTitle>Weather</PageTitle>
-@if(LostItems is null)
+@if(FoundItems is null)
 {
     <p>Loading Lost Items...</p>
 }
@@ -33,63 +33,63 @@ else
             <button type="button" class="btn btn-primary" @onclick="Search">Search</button>
         </div>
         <div class="col">
-            <NavLink href="/makelostitem">
-                <button class="btn btn-primary">Create Bounty</button>
+            <NavLink href="/makefounditem">
+                <button class="btn btn-primary">Create Found</button>
             </NavLink>
         </div>
     </div>
     @if(ShowItems.Count < 1)
     {
-        <p>There's no lost items</p>
+        <p>There's no found items</p>
     }
     else
     {
         <div class="row row-cols-1 row-cols-md-4 g-1">
-            @foreach (var item in ShowItems)
-            {
-                <div class="col">
-                    <div class="card" style="width: 16rem;">
-                        <img src="@item.Urls[0]" style="height:14rem;"class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">@item.Name</h5>
-                            <p class="card-text">@item.Location </p>
-                        </div>
-                        <ul class="list-group list-group-flush text-center">
-                            <li class="list-group-item">@item.WordOne, @item.WordTwo, @item.WordThree</li>
+        @foreach (var item in ShowItems)
+        {
+            <div class="col">
+                <div class="card" style="width: 16rem;">
+                    <img src="@item.Urls[0]" style="height:14rem;"class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text">@item.Location </p>
+                    </div>
+                    <ul class="list-group list-group-flush text-center">
+                        <li class="list-group-item">@item.WordOne, @item.WordTwo, @item.WordThree</li>
                     
                     
-                        </ul>
-                        <div class="card-body text-center">
-                            <NavLink href="LostItemView">
-                                <button class="btn btn-primary" @onclick="() => StateContainer.LostItemFound(item)">Investigate</button>
-                            </NavLink>
-                        </div>
+                    </ul>
+                    <div class="card-body text-center">
+                        <NavLink href="FoundItemView">
+                            <button class="btn btn-primary" @onclick="() => StateContainer.FoundItemLost(item)">Investigate</button>
+                        </NavLink>
                     </div>
                 </div>
-            }
-        </div> 
+            </div>
+        }
+        </div>  
     }
 </div>
 }
 
 @code{
     private Input Filter { get; set; } = new();
-    private List<LostItem> LostItems { get; set; } = new();
-    private List<LostItem> ShowItems{ get; set; }
+    private List<FoundItem> FoundItems { get; set; } = new();
+    private List<FoundItem> ShowItems{ get; set; }
     protected override async Task OnInitializedAsync()
     {
-        LostItems = db.LostItems.Where(l => l.HasBeenFound == false).ToList(); //TODO: To optmise here
-        ShowItems = LostItems;
+        FoundItems = db.FoundItems.Where(l => l.OwnerFound == false).ToList(); //TODO: To optmise here
+        ShowItems = FoundItems;
     }
     private async Task Search()
     {
         if (String.IsNullOrEmpty(Filter.WordOne) && String.IsNullOrEmpty(Filter.WordTwo) && String.IsNullOrEmpty(Filter.WordThree))
         {
-            ShowItems = LostItems;
+            ShowItems = FoundItems;
         }
         else
         {
-            ShowItems = LostItems.Select(l => new
+            ShowItems = FoundItems.Select(l => new
             {
                 item = l,
                 MatchEvaluation = (l.WordOne == Filter.WordOne ? 1 : 0) + (l.WordTwo == Filter.WordTwo ? 1 : 0) + (l.WordThree == Filter.WordThree ? 1 : 0),
