@@ -10,5 +10,6 @@ public class ApplicationUser : IdentityUser
     public string YearGroup { get; set; }
     public List<LostItem> LostItems { get; set; } = new();
     public List<FoundItem> FoundItems { get; set; } = new();
+    public string ProfilePictureUrl { get; set; }
 }
 

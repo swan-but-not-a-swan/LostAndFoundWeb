@@ -6,8 +6,11 @@ namespace LostAndFoundWeb.Services
     {
         public event Action? LostEvent;
         public event Action? FoundEvent;
+        public event Action? UrlEvent;
+
         public LostItem LostItem { get; set; }
         public FoundItem FoundItem { get; set; }
+        public string ProfilePictureUrl { get; set; }
 
         public void LostItemFound(LostItem lostitem)
         {
@@ -18,6 +21,11 @@ namespace LostAndFoundWeb.Services
         {
             FoundItem = founditem;
             FoundEvent?.Invoke();
+        }
+        public void Url(string url)
+        {
+            ProfilePictureUrl = url;
+            UrlEvent?.Invoke();
         }
     }
 }

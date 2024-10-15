@@ -1,10 +1,11 @@
-﻿﻿@using Microsoft.AspNetCore.Authorization
+﻿@using LostAndFoundWeb.Services
+﻿@using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
 @using LostAndFoundWeb.Components.Account
 @using LostAndFoundWeb.Data
 @inject UserManager<ApplicationUser> UserManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
-
+@inject StateContainer StateContainer
 
 
     <div class="container-fluid">
@@ -23,13 +24,21 @@
             <NavLink class="nav-link" href="/foundlist"><h3>Found items</h3></NavLink>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#"><h3>Home</h3></a>
+            <NavLink class="nav-link" href="#"><h3>Home</h3></NavLink>
         </li>
         </ul>
 
-        <a class="navbar-nav" href="#">
-            <img src="Images/placeholder.jpg" alt="Google Profile Picture" class="rounded-circle" style="width:100px;height:100px;"/>
-        </a>
+        <NavLink class="navbar-nav" href="/Account/Manage">
+        @if(String.IsNullOrEmpty(url))
+        {
+            <img src="Images/placeholder.jpg" alt="Google Profile Picture" class="rounded-circle" style="width:100px;height:100px;" />
+        }
+        else
+        {
+            <img src="@url" alt="Google Profile Picture" class="rounded-circle" style="width:100px;height:100px;" />
+
+        }
+        </NavLink>
     </div>
 
 
@@ -38,14 +47,16 @@
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
     private ApplicationUser user = default!;
-    private string username = "";
+    private string url = "";
+    private string ProfilePictureUrl;
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
-        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        if(user.Identity.IsAuthenticated)
         {
-            username = user.Identity.Name;
-        }
+            string userId = UserManager.GetUserId(user);
+            url = $"https://landfimages.blob.core.windows.net/profilepictures/{userId}.jpg";
+        }        
     }
 }

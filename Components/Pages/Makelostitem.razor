@@ -1,10 +1,13 @@
 ﻿@page "/makelostitem"
 @using Azure.Storage.Blobs
 @using LostAndFoundWeb.Data
+@using LostAndFoundWeb.Services
 @using Microsoft.AspNetCore.Identity
 @inject BlobServiceClient blob
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<ApplicationUser> UserManager
+@inject NavigationManager NavigationManager
+@inject StateContainer StateContainer
 @inject ApplicationDbContext db
 @rendermode InteractiveServer
 
@@ -43,4 +46,34 @@
     <ValidationMessage For="() => LostItem.Urls" class="text-danger"/>
     <button type="submit" class="btn btn-primary">Submit</button>
 </EditForm>
+@if(SubmitButtonClicked)
+{
+    <div class="table-responsive">
+        <tbody>
+            <tr>
+                @foreach(var item in ShowItems)
+                {
+                    <td>
+                        <div class="card" style="width: 16rem;">
+                            <img src="@item.Urls[0]" style="height:14rem;" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Name</h5>
+                                <p class="card-text">@item.Location </p>
+                            </div>
+                            <ul class="list-group list-group-flush text-center">
+                                <li class="list-group-item">@item.WordOne, @item.WordTwo, @item.WordThree</li>
+                            </ul>
+                            <div class="card-body text-center">
+                                <NavLink href="FoundItemView">
+                                    <button class="btn btn-primary" @onclick="() => StateContainer.FoundItemLost(item)">Investigate</button>
+                                </NavLink>
+                            </div>
+                        </div>
+                    </td>
+                }
+            </tr>
+        </tbody>
+    </div>
+    <button type="button" class="btn btn-primary" @onclick="PostLostItem">Post Lost Item</button>
+}
 

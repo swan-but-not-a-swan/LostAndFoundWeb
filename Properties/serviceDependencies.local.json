@@ -11,6 +11,14 @@
       "type": "mssql.azure",
       "connectionId": "ConnectionStrings:lostandfounddb",
       "dynamicId": null
+    },
+    "storage1": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.ServiceLinker/locations/southeastasia/connectors/Blob_00F2E3D621",
+      "secretStore": "LocalSecretsFile",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/landfimages",
+      "type": "storage.azure",
+      "connectionId": "Blob",
+      "dynamicId": null
     }
   }
 }

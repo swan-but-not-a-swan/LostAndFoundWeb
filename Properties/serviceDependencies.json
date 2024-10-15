@@ -8,6 +8,11 @@
       "type": "mssql",
       "connectionId": "ConnectionStrings:lostandfounddb",
       "dynamicId": null
+    },
+    "storage1": {
+      "type": "storage",
+      "connectionId": "Blob",
+      "dynamicId": null
     }
   }
 }

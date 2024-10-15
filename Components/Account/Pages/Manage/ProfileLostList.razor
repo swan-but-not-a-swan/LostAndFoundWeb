@@ -1,4 +1,4 @@
-﻿@page "/Account/Manage/FoundList"
+﻿@page "/Account/Manage/LostList"
 @using LostAndFoundWeb.Data
 @using LostAndFoundWeb.Services
 @using Microsoft.EntityFrameworkCore
@@ -8,22 +8,22 @@
         height: 100px;
     }
 </style>
-<PageTitle>User Found List</PageTitle>
-@if (FoundItems is null)
+<PageTitle>User Lost List</PageTitle>
+@if (LostItems is null)
 {
-    <p>Loading Found Items...</p>
+    <p>Loading Lost Items...</p>
 }
 else
 {
     <div class="container">
-        @if (FoundItems.Count < 1)
+        @if (LostItems.Count < 1)
         {
-            <p>There's no found items</p>
+            <p>There's no lost items</p>
         }
         else
         {
             <div class="row row-cols-1 row-cols-md-4 g-1">
-                @foreach (var item in FoundItems)
+                @foreach (var item in LostItems)
                 {
                     <div class="col">
                         <div class="card" style="width: 16rem;">
@@ -45,10 +45,10 @@ else
 
 @code {
     [CascadingParameter]
-    private HttpContext HttpContext { get; set; }
-    private List<FoundItem> FoundItems { get; set; } = new();
+    private HttpContext HttpContext{ get; set; }
+    private List<LostItem> LostItems { get; set; } = new();
     protected override async Task OnInitializedAsync()
     {
-        FoundItems = db.FoundItems.Where(l => l.Finder.UserName == HttpContext.User.Identity.Name).ToList(); //TODO: To optmise here
+        LostItems = db.LostItems.AsNoTracking().Where(l => l.LostUser.UserName == HttpContext.User.Identity.Name).ToList(); //TODO: To optmise here
     }
 }

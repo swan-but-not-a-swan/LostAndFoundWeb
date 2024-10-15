@@ -6,6 +6,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<ApplicationUser> UserManager
 @inject ApplicationDbContext db
+@inject NavigationManager NavigationManager
 @attribute [StreamRendering]
 @rendermode InteractiveServer
 <h3>LostItemView</h3>
@@ -97,11 +98,15 @@
                 WordOne = LostItem.WordOne,
                 WordTwo = LostItem.WordTwo,
                 WordThree = LostItem.WordThree,
-                Location = LostItem.Location
+                Location = LostItem.Location,
+                OwnerFound = true,
+                Urls = LostItem.Urls
             };
         user.FoundItems.Add(foundItem);
         await db.FoundItems.AddAsync(foundItem);
         //TODO: Send email
         await db.SaveChangesAsync();
+        NavigationManager.NavigateTo("/lostlist");
+
     }
 }

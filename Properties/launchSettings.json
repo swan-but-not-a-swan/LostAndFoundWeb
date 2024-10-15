@@ -16,7 +16,7 @@
       "applicationUrl": "http://localhost:5041",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "VaultUri": "https://lostandfoundwebvault.vault.azure.net/",
+        "VaultUri": "https://lostandfoundkeyvault.vault.azure.net/",
         "AZURE_USERNAME": "SwanSett@outlook.com"
       }
     },
@@ -27,7 +27,7 @@
       "applicationUrl": "https://localhost:7254;http://localhost:5041",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "VaultUri": "https://lostandfoundwebvault.vault.azure.net/",
+        "VaultUri": "https://lostandfoundkeyvault.vault.azure.net/",
         "AZURE_USERNAME": "SwanSett@outlook.com"
       }
     },
@@ -36,7 +36,7 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "VaultUri": "https://lostandfoundwebvault.vault.azure.net/",
+        "VaultUri": "https://lostandfoundkeyvault.vault.azure.net/",
         "AZURE_USERNAME": "SwanSett@outlook.com"
       }
     }

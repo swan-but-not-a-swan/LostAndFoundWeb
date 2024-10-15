@@ -11,14 +11,17 @@ public partial class Makefounditem
     private HttpContext HttpContext { get; set; }
     [SupplyParameterFromForm]
     private Input FoundItem { get; set; } = new();
+    private FoundItem foundItem { get; set; }
     private EditContext _EditContext { get; set; }
+    private List<LostItem> ShowItems { get; set; }
     private ValidationMessageStore MessageStore { get; set; }
     private const int FILESCOUNT = 5;
     private bool MaxFilesExceeded = false;
     private const long MAXFILESIZE = 1024 * 1024 * 3;
     private string error;
+    private bool SubmitButtonClicked = false;
     private IReadOnlyList<IBrowserFile>? files;
-
+    
     protected override void OnInitialized()
     {
         _EditContext = new EditContext(FoundItem);
@@ -33,18 +36,35 @@ public partial class Makefounditem
             MessageStore?.Add(() => FoundItem.Urls, "The maximum files allowed is 5.");
             _EditContext?.NotifyValidationStateChanged();
         }
-        foreach (var file in files)
+        if (files.Count > 0 && files is not null )
         {
-            if (file.Size > MAXFILESIZE)
+            foreach (var file in files)
             {
-                MessageStore?.Add(() => FoundItem.Urls, "The maximum file size is 3 MB");
-                _EditContext?.NotifyValidationStateChanged();
+                if (file.Size > MAXFILESIZE)
+                {
+                    MessageStore?.Add(() => FoundItem.Urls, "The maximum file size is 3 MB");
+                    _EditContext?.NotifyValidationStateChanged();
+                }
             }
         }
     }
     private async Task Submit()
     {
-        FoundItem foundItem = new() { Name = FoundItem.Name, WordOne = FoundItem.WordOne, WordTwo = FoundItem.WordTwo, WordThree = FoundItem.WordThree, Location = FoundItem.Location };
+        foundItem = new() { Name = FoundItem.Name, WordOne = FoundItem.WordOne, WordTwo = FoundItem.WordTwo, WordThree = FoundItem.WordThree, Location = FoundItem.Location };
+        List<string> words = new List<string>() { FoundItem.WordOne, FoundItem.WordTwo, FoundItem.WordThree };
+        SubmitButtonClicked = true;
+        ShowItems = db.LostItems.ToList();
+        ShowItems = db.LostItems.Where(l => l.HasBeenFound == false).Select(l => new
+        {
+            item = l,
+            MatchEvaluation = (words.Any(x => x == l.WordOne) ? 1 : 0) + (words.Any(x => x == l.WordTwo) ? 1 : 0) + (words.Any(x => x == l.WordThree) ? 1 : 0),
+        })
+            .Where(x => x.MatchEvaluation > 0)
+            .OrderByDescending(x => x.MatchEvaluation)
+            .Select(l => l.item).ToList();
+    }
+    private async Task PostFoundItem()
+    {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = await UserManager.GetUserAsync(authState.User);
         var username = await UserManager.GetUserNameAsync(user);
@@ -53,7 +73,7 @@ public partial class Makefounditem
         foreach (var file in files)
         {
             string blobname = $"{Guid.NewGuid().ToString()}.jpg";
-            await containerClient.UploadBlobAsync(blobname, file.OpenReadStream(maxAllowedSize:MAXFILESIZE));
+            await containerClient.UploadBlobAsync(blobname, file.OpenReadStream(maxAllowedSize: MAXFILESIZE));
             var blob = containerClient.GetBlobClient(blobname);
             FoundItem.Urls.Add(blob.Uri.ToString());
         }
@@ -62,10 +82,11 @@ public partial class Makefounditem
         user.FoundItems.Add(foundItem);
         await db.FoundItems.AddAsync(foundItem);
         await db.SaveChangesAsync();
+        NavigationManager.NavigateTo("/foundlist");
     }
     private void LoadFiles(InputFileChangeEventArgs e)
     {
-        if (e.FileCount > FILESCOUNT)
+        if (e.FileCount > FILESCOUNT && e is not null)
         {
             MaxFilesExceeded = true;
             return;

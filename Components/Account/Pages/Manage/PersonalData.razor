@@ -1,13 +1,17 @@
-﻿@page "/Account/Manage/PersonalData"
-
+﻿@page "/Account/Manage/Logout"
+@using LostAndFoundWeb.Data
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Authorization
+@inject IdentityRedirectManager RedirectManager
+@inject SignInManager<ApplicationUser> SignInManager
 @inject IdentityUserAccessor UserAccessor
-
+@attribute [AllowAnonymous]
 <PageTitle>Personal Data</PageTitle>
 
 <StatusMessage />
-<h3>Personal Data</h3>
+<h3>You have successfully logged out.</h3>
 
-<div class="row">
+@* <div class="row">
     <div class="col-md-6">
         <p>Your account contains personal data that you have given us. This page allows you to download or delete that data.</p>
         <p>
@@ -22,13 +26,17 @@
         </p>
     </div>
 </div>
-
+ *@
 @code {
+    //TODO To Delete the entire page if possible
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
+    [Parameter]
+    public string? name { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        _ = await UserAccessor.GetRequiredUserAsync(HttpContext);
+        await SignInManager.SignOutAsync();
+        RedirectManager.RedirectTo("/");
     }
 }
