@@ -11,7 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Azure.Security.KeyVault.Keys;
 using Azure.Security.KeyVault.Secrets;
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration.AddAzureKeyVault(new Uri(builder.Configuration.GetValue<string>("VaultUri")), new DefaultAzureCredential());
+builder.Configuration.AddAzureKeyVault(new Uri(builder.Configuration.GetValue<string>("VaultUri")), new ManagedIdentityCredential("d53fcb68-e0d0-4781-8654-b28ac5aa18d3"));
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
