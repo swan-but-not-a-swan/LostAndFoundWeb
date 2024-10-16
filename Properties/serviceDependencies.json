@@ -9,14 +9,19 @@
       "connectionId": "VaultUri",
       "dynamicId": null
     },
-    "mssql2": {
-      "type": "mssql",
-      "connectionId": "ConnectionStrings:lostandfounddb"
-    },
     "storage1": {
       "type": "storage",
       "connectionId": "Blob",
       "dynamicId": null
+    },
+    "secrets2": {
+      "type": "secrets",
+      "connectionId": "VaultUri",
+      "dynamicId": null
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:lostandfounddb"
     }
   }
 }
