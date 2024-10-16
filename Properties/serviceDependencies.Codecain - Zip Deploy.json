@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "secrets1": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/Codecain/providers/Microsoft.ServiceLinker/linkers/VaultUri_AE32C1C403",
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.KeyVault/vaults/lostandfoundkeyvault",
+      "type": "secrets.keyVault",
+      "connectionId": "VaultUri",
+      "dynamicId": null
+    },
+    "mssql2": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/Codecain/providers/Microsoft.ServiceLinker/linkers/ConnectionStringslostandfounddb_E5DD52753C",
+      "secretStore": "AzureKeyVault",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/lostandfoundweb/databases/lostandfoundDb",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:lostandfounddb"
+    },
+    "storage1": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/Codecain/providers/Microsoft.ServiceLinker/linkers/Blob_00F2E3D621, /subscriptions/72ab7118-f887-4ceb-b0ff-88f2e84c426d/resourceGroups/LostandFoundWeb/providers/Microsoft.Web/sites/Codecain/providers/Microsoft.ServiceLinker/linkers/Blob_3098EC4C07",
+      "secretStore": "AzureKeyVault",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/landfimages",
+      "type": "storage.azure",
+      "connectionId": "Blob",
+      "dynamicId": null
+    }
+  }
+}
