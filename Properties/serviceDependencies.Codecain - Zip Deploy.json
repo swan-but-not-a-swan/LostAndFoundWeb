@@ -17,11 +17,11 @@
       "dynamicId": null
     },
     "mssql2": {
-      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/Codecain/providers/Microsoft.ServiceLinker/linkers/ConnectionStringslostandfounddb_E5DD52753C",
-      "secretStore": "AzureKeyVault",
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/Codecain/providers/Microsoft.ServiceLinker/linkers/ConnectionStringsConnectionString_03D298CA3B",
+      "secretStore": "AzureAppSettings",
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/lostandfoundweb/databases/lostandfoundDb",
       "type": "mssql.azure",
-      "connectionId": "ConnectionStrings:lostandfounddb"
+      "connectionId": "ConnectionStrings:ConnectionString"
     }
   }
 }

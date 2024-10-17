@@ -12,14 +12,6 @@
       "connectionId": "Blob",
       "dynamicId": null
     },
-    "mssql2": {
-      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.ServiceLinker/locations/southeastasia/connectors/ConnectionStringslostandfounddb_E5DD52753C",
-      "secretStore": "LocalSecretsFile",
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/lostandfoundweb/databases/lostandfoundDb",
-      "type": "mssql.azure",
-      "connectionId": "ConnectionStrings:lostandfounddb",
-      "dynamicId": null
-    },
     "secrets2": {
       "secretStore": null,
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.KeyVault/vaults/lostandfoundkeyvault",

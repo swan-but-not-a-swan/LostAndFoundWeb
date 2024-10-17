@@ -21,7 +21,7 @@
     },
     "mssql2": {
       "type": "mssql",
-      "connectionId": "ConnectionStrings:lostandfounddb"
+      "connectionId": "ConnectionStrings:ConnectionString"
     }
   }
 }

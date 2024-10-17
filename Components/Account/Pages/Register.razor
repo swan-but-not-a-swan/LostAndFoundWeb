@@ -26,7 +26,7 @@
 <div class="row">
     <div class="col-md-4">
         <StatusMessage Message="@Message" />
-        <EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" enctype="multipart/form-data" OnValidSubmit="RegisterUser" FormName="register">
+        <EditForm EditContext="_EditContext" asp-route-returnUrl="@ReturnUrl" method="post" enctype="multipart/form-data" OnValidSubmit="RegisterUser" FormName="register">
             <DataAnnotationsValidator />
             <h2>Create a new account.</h2>
             <hr />
@@ -52,15 +52,9 @@
                 <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
             </div>
             <InputFile name="Input.file" class="form-control"></InputFile>
+            <ValidationMessage For="() => Input.file" class="text-danger" />
             <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </EditForm>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
-            <ExternalLoginPicker />
-        </section>
     </div>
 </div>
 
@@ -72,8 +66,26 @@
 
     [SupplyParameterFromQuery]
     private string? ReturnUrl { get; set; }
+    private EditContext _EditContext { get; set; }
+    private ValidationMessageStore MessageStore { get; set; }
     private string? Message => identityErrors is null ? null : $"Error: {string.Join(", ", identityErrors.Select(error => error.Description))}";
+    //TODO: Send Email Registration, validate profile picture
+    protected override void OnInitialized()
+    {
+        _EditContext = new EditContext(Input);
+        MessageStore = new(_EditContext);
+        _EditContext.OnValidationRequested += HandleValidationRequest;
+    }
+    private void HandleValidationRequest(object? sender, ValidationRequestedEventArgs e)
+    {
+        MessageStore?.Clear();
+        if (Input.file is null)
+        {
+            MessageStore?.Add(() => Input.file, "The profile picture can't be empty");
+            _EditContext?.NotifyValidationStateChanged();
+        }
 
+    }
     public async Task RegisterUser(EditContext editContext)
     {
         var user = CreateUser();
