@@ -11,7 +11,7 @@
 @inject ApplicationDbContext db
 @rendermode InteractiveServer
 
-<h3>Makefounditem</h3>
+<h3>Report Found Item</h3>
 <EditForm EditContext="_EditContext" FormName="MakeFoundItem" OnValidSubmit="Submit" method="post">
     <DataAnnotationsValidator/>
     <ValidationSummary/>
@@ -22,18 +22,18 @@
     </div>
     <div class="input-group">
         <div class="form-floating mb-3">
-            <InputText @bind-Value="FoundItem.WordOne" class="form-control" placeholder="WordOne"/>
-            <label for="LostItem.WordOne" class="form-label">WordOne</label>
+            <InputText @bind-Value="FoundItem.WordOne" class="form-control" placeholder="Word One"/>
+            <label for="LostItem.WordOne" class="form-label">Word One</label>
             <ValidationMessage For="() => FoundItem.WordOne" class="text-danger"/>
         </div>
         <div class="form-floating mb-3">
-            <InputText @bind-Value="FoundItem.WordTwo" class="form-control" placeholder="WordTwo"/>
-            <label for="LostItem.WordTwo" class="form-label">WordTwo</label>
+            <InputText @bind-Value="FoundItem.WordTwo" class="form-control" placeholder="Word Two"/>
+            <label for="LostItem.WordTwo" class="form-label">Word Two</label>
             <ValidationMessage For="() => FoundItem.WordTwo" class="text-danger"/>
         </div>
         <div class="form-floating mb-3">
-            <InputText @bind-Value="FoundItem.WordThree" class="form-control" placeholder="WordThree"/>
-            <label for="LostItem.WordThree" class="form-label">WordThree</label>
+            <InputText @bind-Value="FoundItem.WordThree" class="form-control" placeholder="Word Three"/>
+            <label for="LostItem.WordThree" class="form-label">Word Three</label>
             <ValidationMessage For="() => FoundItem.WordThree" class="text-danger"/>
         </div>
     </div>
@@ -44,7 +44,7 @@
     </div>
     <InputFile OnChange="@LoadFiles" class="form-control" multiple accept=".png,.jpg,.jpeg"/>
     <ValidationMessage For="() => FoundItem.Urls" class="text-danger"/>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary mt-3">Submit</button>
 </EditForm>
 @if (SubmitButtonClicked)
 {
