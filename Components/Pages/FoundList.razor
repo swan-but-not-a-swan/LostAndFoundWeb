@@ -78,11 +78,12 @@ else
     private List<FoundItem> ShowItems{ get; set; }
     protected override async Task OnInitializedAsync()
     {
-        FoundItems = db.FoundItems.Where(l => l.OwnerFound == false).ToList(); //TODO: To optmise here
+        FoundItems = db.FoundItems.Where(l => l.OwnerFound == false).ToList();
         ShowItems = FoundItems;
     }
     private async Task Search()
     {
+        List<string> words = new List<string>() { Filter.WordOne, Filter.WordTwo, Filter.WordThree };
         if (String.IsNullOrEmpty(Filter.WordOne) && String.IsNullOrEmpty(Filter.WordTwo) && String.IsNullOrEmpty(Filter.WordThree))
         {
             ShowItems = FoundItems;
@@ -92,8 +93,9 @@ else
             ShowItems = FoundItems.Select(l => new
             {
                 item = l,
-                MatchEvaluation = (l.WordOne == Filter.WordOne ? 1 : 0) + (l.WordTwo == Filter.WordTwo ? 1 : 0) + (l.WordThree == Filter.WordThree ? 1 : 0),
+                MatchEvaluation = (words.Any(x => x.ToLower() == l.WordOne.ToLower()) ? 1 : 0) + (words.Any(x => x.ToLower() == l.WordTwo.ToLower()) ? 1 : 0) + (words.Any(x => x.ToLower() == l.WordThree.ToLower()) ? 1 : 0),
             })
+            .Where(x => x.MatchEvaluation > 0)
             .OrderByDescending(x => x.MatchEvaluation)
             .Select(l => l.item).ToList();
         }

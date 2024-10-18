@@ -7,7 +7,9 @@
 @inject UserManager<ApplicationUser> UserManager
 @inject ApplicationDbContext db
 @inject NavigationManager NavigationManager
-@attribute [StreamRendering]
+@inject IEmailService EmailService
+
+ @attribute [StreamRendering]
 @rendermode InteractiveServer
 <h3>LostItemView</h3>
 @if (LostItem is not null)
@@ -78,35 +80,4 @@
         const carousel = new bootstrap.Carousel('#myCarousel')
     </script>
 }
-@code {
-    [SupplyParameterFromForm]
-    private LostItem LostItem { get; set; } = new();
-    private string PickUpLocation{ get; set; }
-    protected override async Task OnInitializedAsync()
-    {
-        StateContainer.LostEvent += StateHasChanged;
-        LostItem = StateContainer.LostItem;
-    }
-    private async Task Found()
-    {
-        var authstate = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = await UserManager.GetUserAsync(authstate.User);
-        LostItem.HasBeenFound = true;
-        FoundItem foundItem = new FoundItem()
-            {
-                Name = LostItem.Name,
-                WordOne = LostItem.WordOne,
-                WordTwo = LostItem.WordTwo,
-                WordThree = LostItem.WordThree,
-                Location = LostItem.Location,
-                OwnerFound = true,
-                Urls = LostItem.Urls
-            };
-        user.FoundItems.Add(foundItem);
-        await db.FoundItems.AddAsync(foundItem);
-        //TODO: Send email
-        await db.SaveChangesAsync();
-        NavigationManager.NavigateTo("/lostlist");
 
-    }
-}

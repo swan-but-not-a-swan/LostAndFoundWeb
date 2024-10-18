@@ -14,13 +14,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddAzureKeyVault(new Uri(builder.Configuration.GetValue<string>("VaultUri")), new DefaultAzureCredential());
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+    .AddInteractiveServerComponents()
+    .AddCircuitOptions(options =>
+    {
+        options.DetailedErrors = true;
+    });
 
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
-
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultScheme = IdentityConstants.ApplicationScheme;
@@ -42,6 +45,8 @@ builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSe
 var keyvault = new SecretClient(new Uri(builder.Configuration.GetValue<string>("VaultUri")), new DefaultAzureCredential());
 builder.Services.AddAzureClients(azureBuilder => azureBuilder.AddBlobServiceClient(builder.Configuration["Blob"]));
 builder.Services.AddScoped<StateContainer>();
+builder.Services.AddSingleton<IEmailService, EmailService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
