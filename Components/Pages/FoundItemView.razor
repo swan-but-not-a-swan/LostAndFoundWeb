@@ -9,20 +9,20 @@
 @inject NavigationManager NavigationManager
 @attribute [StreamRendering]
 @rendermode InteractiveServer
-<h3>FoundItemView</h3>
+<h3>Found Item View</h3>
 @if (FoundItem is not null)
 {
     <div class="container">
         <div class="row">
             <div id="carouselExampleFade" class="carousel slide carousel-fade">
                 <div class="carousel-inner">
-                    <div class="carousel-item active" data-bs-slide="0">
-                        <img src="@FoundItem.Urls[0]" class="d-block w-100" alt="..." style="height:200px;">
+                    <div class="carousel-item active" data-bs-slide="0" style="height: 200px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                        <img src="@FoundItem.Urls[0]" class="d-block w-100" alt="..." style="max-width:200px; width: 100%; max-height: 100%; height: auto;">
                     </div>
                    @for(int i = 1; i < FoundItem.Urls.Count; i++)
                     {
-                        <div class="carousel-item" data-bs-slide="0">
-                            <img src="@FoundItem.Urls[i]" class="d-block w-100" alt="..." style="height:200px;">
+                        <div class="carousel-item" data-bs-slide="0" style="height: 200px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                            <img src="@FoundItem.Urls[i]" class="d-block w-100" alt="..." style="max-width:200px; width: 100%; max-height: 100%; height: auto;">
                         </div>
                     }
                 </div>
@@ -37,33 +37,33 @@
             </div>
         </div>
         
-            <div class="col-md-6 col-centered">
+            <div class="col-md-6 col-centered mt-1">
                 <EditForm FormName="LostItem" Model="FoundItem" OnValidSubmit="Found">
                     <ValidationSummary/>
                     <DataAnnotationsValidator/>
                     <div class="form-floating mb-3">
-                        <input type="text" value="@FoundItem.Name" class="form-control" placeholder="Address" disabled />
-                        <label for="username" class="form-label">Address</label>
+                        <input type="text" value="@FoundItem.Name" class="form-control" placeholder="Name" disabled />
+                        <label for="username" class="form-label">Name</label>
                     </div>
                     <div class="form-floating mb-3">
                         <div class="input-group mb-3">
                             <div class="form-floating w-25">
-                                <input type="text" value="@FoundItem.WordOne" class="form-control" placeholder="Date" disabled />
-                                <label for="username" class="form-label">Date</label>
+                                <input type="text" value="@FoundItem.WordOne" class="form-control" placeholder="Word One" disabled />
+                                <label for="username" class="form-label">Word One</label>
                             </div>
                             <div class="form-floating w-25">
-                                <input type="text" value="@FoundItem.WordTwo" class="form-control" placeholder="Start Time" disabled />
-                                <label for="starttime" class="form-label">StartTime</label>
+                                <input type="text" value="@FoundItem.WordTwo" class="form-control" placeholder="Word Two" disabled />
+                                <label for="starttime" class="form-label">Word Two</label>
                             </div>
                             <div class="form-floating w-25">
-                                <input type="text" value="@FoundItem.WordThree" class="form-control" placeholder="End Time" disabled/>
-                                <label for="starttime" class="form-label">EndTime</label>
+                                <input type="text" value="@FoundItem.WordThree" class="form-control" placeholder="Word Three" disabled/>
+                                <label for="starttime" class="form-label">Word Three</label>
                             </div>
                         </div>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" value="@FoundItem.Location" class="form-control" placeholder="Description" disabled/>
-                        <label for="description" class="form-label">Description</label>
+                        <input type="text" value="@FoundItem.Location" class="form-control" placeholder="Location" disabled/>
+                        <label for="description" class="form-label">Location</label>
                     </div>
                 <div class="form-floating mb-3">
                     <InputText @bind-Value="@PickUpLocation" class="form-control" placeholder="Description" />

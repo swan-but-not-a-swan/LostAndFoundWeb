@@ -83,7 +83,7 @@ public partial class Makelostitem
         user.LostItems.Add(lostItem);
         await db.LostItems.AddAsync(lostItem);
         await db.SaveChangesAsync();
-        NavigationManager.NavigateTo("/lostlist");
+        NavigationManager.NavigateTo("/");
     }
     private void LoadFiles(InputFileChangeEventArgs e)
     {
