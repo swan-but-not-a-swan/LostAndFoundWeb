@@ -7,6 +7,7 @@
 @inject UserManager<ApplicationUser> UserManager
 @inject ApplicationDbContext db
 @inject NavigationManager NavigationManager
+@inject IEmailService EmailService
 @attribute [StreamRendering]
 @rendermode InteractiveServer
 <h3>Found Item View</h3>
@@ -105,6 +106,7 @@
         user.LostItems.Add(lostItem);
         await db.LostItems.AddAsync(lostItem);
         //TODO: Send email
+        await EmailService.SendEmailAsync($"The item you found is owned by {user.UserName}. Please give at {PickUpLocation}.", FoundItem.Finder.Email, "Owner found");
         await db.SaveChangesAsync();
         NavigationManager.NavigateTo("/foundlist");
 

@@ -49,6 +49,6 @@ else
     private List<FoundItem> FoundItems { get; set; } = new();
     protected override async Task OnInitializedAsync()
     {
-        FoundItems = db.FoundItems.Where(l => l.Finder.UserName == HttpContext.User.Identity.Name).ToList(); //TODO: To optmise here
+        FoundItems = await db.FoundItems.AsNoTracking().Where(l => l.Finder.UserName == HttpContext.User.Identity.Name).ToListAsync(); //TODO: To optmise here
     }
 }
