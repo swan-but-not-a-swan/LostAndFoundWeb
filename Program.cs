@@ -41,7 +41,7 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
     .AddSignInManager()
     .AddDefaultTokenProviders();
 
-builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+builder.Services.AddSingleton<IEmailSender<ApplicationUser>, EmailService>();
 var keyvault = new SecretClient(new Uri(builder.Configuration.GetValue<string>("VaultUri")), new DefaultAzureCredential());
 builder.Services.AddAzureClients(azureBuilder => azureBuilder.AddBlobServiceClient(builder.Configuration["Blob"]));
 builder.Services.AddScoped<StateContainer>();

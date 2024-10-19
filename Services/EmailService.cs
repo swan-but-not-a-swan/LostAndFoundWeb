@@ -1,10 +1,11 @@
 ﻿using LostAndFoundWeb.Data;
 using MailKit.Net.Smtp;
+using Microsoft.AspNetCore.Identity;
 using MimeKit;
 
 namespace LostAndFoundWeb.Services;
 
-public class EmailService: IEmailService
+public class EmailService: IEmailService,IEmailSender<ApplicationUser>
 {
     private string password;
     public EmailService(IConfiguration configuration)
