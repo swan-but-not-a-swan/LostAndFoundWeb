@@ -57,7 +57,7 @@ public partial class Makefounditem
         ShowItems = db.LostItems.Where(l => l.HasBeenFound == false).Select(l => new
         {
             item = l,
-            MatchEvaluation = (words.Any(x => x == l.WordOne) ? 1 : 0) + (words.Any(x => x == l.WordTwo) ? 1 : 0) + (words.Any(x => x == l.WordThree) ? 1 : 0),
+            MatchEvaluation = (words.Any(x => x.ToLower() == l.WordOne.ToLower()) ? 1 : 0) + (words.Any(x => x.ToLower() == l.WordTwo.ToLower()) ? 1 : 0) + (words.Any(x => x.ToLower() == l.WordThree.ToLower()) ? 1 : 0),
         })
             .Where(x => x.MatchEvaluation > 0)
             .OrderByDescending(x => x.MatchEvaluation)

@@ -49,6 +49,6 @@ else
     private List<LostItem> LostItems { get; set; } = new();
     protected override async Task OnInitializedAsync()
     {
-        LostItems = db.LostItems.AsNoTracking().Where(l => l.LostUser.UserName == HttpContext.User.Identity.Name).ToList(); //TODO: To optmise here
+        LostItems = await db.LostItems.AsNoTracking().Where(l => l.LostUser.UserName == HttpContext.User.Identity.Name).ToListAsync(); //TODO: To optmise here
     }
 }

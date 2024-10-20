@@ -1,4 +1,4 @@
-﻿@page "/lostlist"
+﻿@page "/"
 @using LostAndFoundWeb.Data
 @using LostAndFoundWeb.Services
 @using Microsoft.EntityFrameworkCore
@@ -78,11 +78,12 @@ else
     private List<LostItem> ShowItems{ get; set; }
     protected override async Task OnInitializedAsync()
     {
-        LostItems = db.LostItems.Where(l => l.HasBeenFound == false).ToList(); //TODO: To optmise here
+        LostItems = db.LostItems.Where(l => l.HasBeenFound == false).ToList();
         ShowItems = LostItems;
     }
     private async Task Search()
     {
+                List<string> words = new List<string>() { Filter.WordOne, Filter.WordTwo, Filter.WordThree };
         if (String.IsNullOrEmpty(Filter.WordOne) && String.IsNullOrEmpty(Filter.WordTwo) && String.IsNullOrEmpty(Filter.WordThree))
         {
             ShowItems = LostItems;
@@ -92,8 +93,9 @@ else
             ShowItems = LostItems.Select(l => new
             {
                 item = l,
-                MatchEvaluation = (l.WordOne == Filter.WordOne ? 1 : 0) + (l.WordTwo == Filter.WordTwo ? 1 : 0) + (l.WordThree == Filter.WordThree ? 1 : 0),
+                MatchEvaluation = (words.Any(x => x.ToLower() == l.WordOne.ToLower()) ? 1 : 0) + (words.Any(x => x.ToLower() == l.WordTwo.ToLower()) ? 1 : 0) + (words.Any(x => x.ToLower() == l.WordThree.ToLower()) ? 1 : 0),
             })
+            .Where(x => x.MatchEvaluation > 0)
             .OrderByDescending(x => x.MatchEvaluation)
             .Select(l => l.item).ToList();
         }

@@ -58,7 +58,7 @@ public partial class Makelostitem
         ShowItems = db.FoundItems.Where(l =>l.OwnerFound == false).Select(l => new
         {
             item = l,
-            MatchEvaluation = (words.Any(x => x == l.WordOne) ? 1 : 0) + (words.Any(x => x == l.WordTwo) ? 1 : 0) + (words.Any(x => x == l.WordThree) ? 1 : 0),
+            MatchEvaluation = (words.Any(x => x.ToLower() == l.WordOne.ToLower()) ? 1 : 0) + (words.Any(x => x.ToLower() == l.WordTwo.ToLower()) ? 1 : 0) + (words.Any(x => x.ToLower() == l.WordThree.ToLower()) ? 1 : 0),
         })
             .Where(x => x.MatchEvaluation > 0)
             .OrderByDescending(x => x.MatchEvaluation)
@@ -83,7 +83,7 @@ public partial class Makelostitem
         user.LostItems.Add(lostItem);
         await db.LostItems.AddAsync(lostItem);
         await db.SaveChangesAsync();
-        NavigationManager.NavigateTo("/lostlist");
+        NavigationManager.NavigateTo("/");
     }
     private void LoadFiles(InputFileChangeEventArgs e)
     {
