@@ -34,7 +34,7 @@ public partial class LostItemView
         //TODO: Send email
         await EmailService.SendEmailAsync($"Your lost item has been found by {user.UserName}. Please collect at {PickUpLocation}.", LostItem.LostUser.Email, "Lost Item found");
         await db.SaveChangesAsync();
-        NavigationManager.NavigateTo("/lostlist");
+        NavigationManager.NavigateTo("/");
 
     }
 }
