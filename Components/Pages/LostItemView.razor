@@ -8,9 +8,10 @@
 @inject ApplicationDbContext db
 @inject NavigationManager NavigationManager
 @inject IEmailService EmailService
-
- @attribute [StreamRendering]
+@attribute [StreamRendering]
 @rendermode InteractiveServer
+
+<PageTitle>Lost Item View</PageTitle>
 <h3>Lost Item</h3>
 @if (LostItem is not null)
 {
